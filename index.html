@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sona Gold Calculator Pro</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #fcf6e5; padding: 15px; margin: 0; }
+        .container { background: white; max-width: 450px; margin: 10px auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #d4af37; }
+        h2 { text-align: center; color: #856404; margin-top: 0; border-bottom: 2px solid #d4af37; padding-bottom: 10px; }
+        .lang-btn { float: right; background: #856404; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .box { margin-bottom: 15px; clear: both; }
+        label { display: block; font-weight: bold; margin-bottom: 6px; color: #5d4037; font-size: 14px; }
+        input, select { width: 100%; padding: 12px; border: 1.5px solid #d4af37; border-radius: 10px; box-sizing: border-box; font-size: 16px; outline: none; background: #fff; }
+        .row { display: flex; gap: 8px; }
+        .result { background: #fffde7; padding: 12px; border-radius: 12px; text-align: center; margin-top: 8px; border: 1px solid #fbc02d; }
+        .price-text { font-size: 22px; font-weight: bold; color: #d32f2f; display: block; }
+        .small-info { font-size: 12px; color: #795548; margin-top: 4px; display: block; font-weight: 500; }
+        hr { border: 0; border-top: 1px dashed #d4af37; margin: 20px 0; }
+        .badge { background: #d4af37; color: white; padding: 2px 8px; border-radius: 5px; font-size: 11px; margin-bottom: 4px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <button class="lang-btn" onclick="toggleLang()" id="langBtn">English</button>
+    <h2 id="title">सोना कैलकुलेटर</h2>
+
+    <div class="box">
+        <label id="lblRate">आज का 24K भाव (प्रति 10 ग्राम):</label>
+        <input type="number" id="goldRate" placeholder="75000" oninput="calculateAll()">
+    </div>
+
+    <div class="box">
+        <label id="lblPurity">शुद्धता (Carat):</label>
+        <select id="carat" onchange="calculateAll()">
+            <option value="24">24K (99.9%)</option>
+            <option value="22" selected>22K (91.6%)</option>
+            <option value="20">20K (83.3%)</option>
+            <option value="18">18K (75.0%)</option>
+            <option value="16">16K (66.6%)</option>
+            <option value="14">14K (58.3%)</option>
+        </select>
+    </div>
+
+    <div class="box">
+        <label id="lblMaking">मेकिंग चार्ज (Making Charge):</label>
+        <div class="row">
+            <input type="number" id="makingVal" placeholder="0" style="flex: 2;" oninput="calculateAll()">
+            <select id="makingType" style="flex: 1;" onchange="calculateAll()">
+                <option value="percent">%</option>
+                <option value="rupee">₹/gm</option>
+            </select>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="box">
+        <span class="badge" id="opt1">विकल्प 1</span>
+        <label id="lblBuyGram">कितने ग्राम खरीदना है? (Weight):</label>
+        <input type="number" id="inputGram" step="0.001" placeholder="0.250" oninput="calcByGram()">
+        <div class="result">
+            <span id="labelA">कुल कीमत (3% GST सहित):</span>
+            <span class="price-text" id="resPrice">₹0.00</span>
+            <span class="small-info" id="infoA"></span>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="box">
+        <span class="badge" id="opt2">विकल्प 2</span>
+        <label id="lblBuyRupee">कितने रुपये का खरीदना है? (Cash):</label>
+        <input type="number" id="inputRupee" placeholder="5000" oninput="calcByRupee()">
+        <div class="result">
+            <span id="labelB">आपको सोना मिलेगा:</span>
+            <span class="price-text" id="resWeight">0.000 g</span>
+            <span class="small-info" id="infoB"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+let currentLang = 'hi';
+
+function toggleLang() {
+    if(currentLang === 'hi') {
+        currentLang = 'en';
+        document.getElementById('langBtn').innerText = "Hindi";
+        document.getElementById('title').innerText = "Gold Calculator";
+        document.getElementById('lblRate').innerText = "Today's 24K Rate (per 10g):";
+        document.getElementById('lblPurity').innerText = "Purity (Carat):";
+        document.getElementById('lblMaking').innerText = "Making Charge:";
+        document.getElementById('opt1').innerText = "Option 1";
+        document.getElementById('lblBuyGram').innerText = "How many Grams to buy?";
+        document.getElementById('labelA').innerText = "Total Price (inc. 3% GST):";
+        document.getElementById('opt2').innerText = "Option 2";
+        document.getElementById('lblBuyRupee').innerText = "Buy for how many Rupees?";
+        document.getElementById('labelB').innerText = "Weight You Will Get:";
+    } else {
+        currentLang = 'hi';
+        document.getElementById('langBtn').innerText = "English";
+        document.getElementById('title').innerText = "सोना कैलकुलेटर";
+        document.getElementById('lblRate').innerText = "आज का 24K भाव (प्रति 10 ग्राम):";
+        document.getElementById('lblPurity').innerText = "शुद्धता (Carat):";
+        document.getElementById('lblMaking').innerText = "मेकिंग चार्ज (Making Charge):";
+        document.getElementById('opt1').innerText = "विकल्प 1";
+        document.getElementById('lblBuyGram').innerText = "कितने ग्राम खरीदना है?";
+        document.getElementById('labelA').innerText = "कुल कीमत (3% GST सहित):";
+        document.getElementById('opt2').innerText = "विकल्प 2";
+        document.getElementById('lblBuyRupee').innerText = "कितने रुपये का खरीदना है?";
+        document.getElementById('labelB').innerText = "आपको सोना मिलेगा:";
+    }
+    calculateAll();
+}
+
+function calculateAll() {
+    calcByGram();
+    calcByRupee();
+}
+
+function getBaseRatePerGram() {
+    let rate10g = parseFloat(document.getElementById('goldRate').value) || 0;
+    let carat = parseInt(document.getElementById('carat').value);
+    return (rate10g / 10 / 24) * carat;
+}
+
+function getMakingPerGram(baseRate) {
+    let val = parseFloat(document.getElementById('makingVal').value) || 0;
+    let type = document.getElementById('makingType').value;
+    return (type === 'percent') ? (baseRate * val / 100) : val;
+}
+
+function calcByGram() {
+    let base = getBaseRatePerGram();
+    let making = getMakingPerGram(base);
+    let grams = parseFloat(document.getElementById('inputGram').value) || 0;
+    
+    if (base > 0 && grams > 0) {
+        let total = (base + making) * grams * 1.03;
+        let noMaking = base * grams * 1.03;
+        document.getElementById('resPrice').innerText = "₹" + total.toLocaleString('en-IN', {minimumFractionDigits: 2});
+        
+        let msg = (currentLang === 'hi') ? "बिना मेकिंग चार्ज के: ₹" : "Without Making Charge: ₹";
+        document.getElementById('infoA').innerText = (making > 0) ? msg + noMaking.toLocaleString('en-IN', {minimumFractionDigits: 2}) : "";
+    } else {
+        document.getElementById('resPrice').innerText = "₹0.00";
+        document.getElementById('infoA').innerText = "";
+    }
+}
+
+function calcByRupee() {
+    let base = getBaseRatePerGram();
+    let making = getMakingPerGram(base);
+    let budget = parseFloat(document.getElementById('inputRupee').value) || 0;
+
+    if (base > 0 && budget > 0) {
+        let weightWithMaking = budget / ((base + making) * 1.03);
+        let weightNoMaking = budget / (base * 1.03);
+        document.getElementById('resWeight').innerText = weightWithMaking.toFixed(3) + " g";
+        
+        let msg = (currentLang === 'hi') ? "बिना मेकिंग के: " : "Without Making: ";
+        document.getElementById('infoB').innerText = (making > 0) ? msg + weightNoMaking.toFixed(3) + " g" : "";
+    } else {
+        document.getElementById('resWeight').innerText = "0.000 g";
+        document.getElementById('infoB').innerText = "";
+    }
+}
+</script>
+
+</body>
+</html>
+    
+  </body>
+  
+</html>
