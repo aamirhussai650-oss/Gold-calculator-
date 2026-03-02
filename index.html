@@ -1,188 +1,208 @@
 <!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Untitled</title>
-    
-
-  </head>
-    
-  <body>
-  <!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sona Gold Calculator Pro</title>
+    <title>Ultimate Tool Pro</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #fcf6e5; padding: 15px; margin: 0; }
-        .container { background: white; max-width: 450px; margin: 10px auto; padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 1px solid #d4af37; }
-        h2 { text-align: center; color: #856404; margin-top: 0; border-bottom: 2px solid #d4af37; padding-bottom: 10px; }
-        .lang-btn { float: right; background: #856404; color: white; border: none; padding: 6px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .box { margin-bottom: 15px; clear: both; }
-        label { display: block; font-weight: bold; margin-bottom: 6px; color: #5d4037; font-size: 14px; }
-        input, select { width: 100%; padding: 12px; border: 1.5px solid #d4af37; border-radius: 10px; box-sizing: border-box; font-size: 16px; outline: none; background: #fff; }
-        .row { display: flex; gap: 8px; }
-        .result { background: #fffde7; padding: 12px; border-radius: 12px; text-align: center; margin-top: 8px; border: 1px solid #fbc02d; }
-        .price-text { font-size: 22px; font-weight: bold; color: #d32f2f; display: block; }
-        .small-info { font-size: 12px; color: #795548; margin-top: 4px; display: block; font-weight: 500; }
-        hr { border: 0; border-top: 1px dashed #d4af37; margin: 20px 0; }
-        .badge { background: #d4af37; color: white; padding: 2px 8px; border-radius: 5px; font-size: 11px; margin-bottom: 4px; display: inline-block; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
+        .container { max-width: 550px; margin: auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-top: 5px solid #d4af37; }
+        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
+        .menu-btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #eee; font-size: 13px; }
+        .menu-btn.active { background: #d4af37; color: white; }
+        .tool-section { display: none; text-align: left; }
+        label { font-weight: bold; display: block; margin-top: 10px; font-size: 14px; }
+        .row { display: flex; gap: 5px; align-items: center; }
+        input, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; }
+        .calc-btn { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .result { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 8px; border: 1px dashed #333; line-height: 1.6; }
+        .or-divider { text-align: center; font-weight: bold; color: #888; margin: 10px 0; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <button class="lang-btn" onclick="toggleLang()" id="langBtn">English</button>
-    <h2 id="title">सोना कैलकुलेटर</h2>
-
-    <div class="box">
-        <label id="lblRate">आज का 24K भाव (प्रति 10 ग्राम):</label>
-        <input type="number" id="goldRate" placeholder="75000" oninput="calculateAll()">
+    <h3 style="text-align:center;">All-In-One Digital Diary 🛠️</h3>
+    
+    <div class="grid-menu">
+        <button class="menu-btn active" onclick="showTool('landTab', this)">Jameen (Land)</button>
+        <button class="menu-btn" onclick="showTool('goldTab', this)">Gold (Sona)</button>
+        <button class="menu-btn" onclick="showTool('bazarTab', this)">Bazar (Mandi)</button>
+        <button class="menu-btn" onclick="showTool('weightTab', this)">Loha & Pani</button>
     </div>
 
-    <div class="box">
-        <label id="lblPurity">शुद्धता (Carat):</label>
-        <select id="carat" onchange="calculateAll()">
-            <option value="24">24K (99.9%)</option>
-            <option value="22" selected>22K (91.6%)</option>
-            <option value="20">20K (83.3%)</option>
-            <option value="18">18K (75.0%)</option>
-            <option value="16">16K (66.6%)</option>
-            <option value="14">14K (58.3%)</option>
-        </select>
-    </div>
-
-    <div class="box">
-        <label id="lblMaking">मेकिंग चार्ज (Making Charge):</label>
+    <div id="landTab" class="tool-section" style="display:block;">
+        <label>Unit Chuniye (4 Sides Ke Liye):</label>
+        <select id="landUnit"><option value="ft">Feet</option><option value="mt">Meter</option></select>
+        <div class="row"><input type="number" id="l1" placeholder="Side A"> <input type="number" id="l2" placeholder="Side B"></div>
+        <div class="row"><input type="number" id="w1" placeholder="Side C"> <input type="number" id="w2" placeholder="Side D"></div>
+        <div class="or-divider">--- YA (DIRECT) ---</div>
+        <label>Direct Total Area Dalein:</label>
         <div class="row">
-            <input type="number" id="makingVal" placeholder="0" style="flex: 2;" oninput="calculateAll()">
-            <select id="makingType" style="flex: 1;" onchange="calculateAll()">
-                <option value="percent">%</option>
-                <option value="rupee">₹/gm</option>
-            </select>
+            <input type="number" id="directArea" placeholder="Value">
+            <select id="directUnit" style="width:120px;"><option value="sqft">Sq. Ft</option><option value="sqmt">Sq. Mt</option></select>
         </div>
+        <button class="calc-btn" onclick="calcLand()">Jameen Ka Hisaab</button>
+        <div id="resLand" class="result" style="display:none;"></div>
     </div>
 
-    <hr>
-
-    <div class="box">
-        <span class="badge" id="opt1">विकल्प 1</span>
-        <label id="lblBuyGram">कितने ग्राम खरीदना है? (Weight):</label>
-        <input type="number" id="inputGram" step="0.001" placeholder="0.250" oninput="calcByGram()">
-        <div class="result">
-            <span id="labelA">कुल कीमत (3% GST सहित):</span>
-            <span class="price-text" id="resPrice">₹0.00</span>
-            <span class="small-info" id="infoA"></span>
-        </div>
+    <div id="goldTab" class="tool-section">
+        <label>24K Gold Rate (10g):</label><input type="number" id="gRate" placeholder="75000">
+        <label>Kitne Caret Ka?</label>
+        <select id="gCarat"><option value="24">24K</option><option value="22">22K</option><option value="20">20K</option><option value="18">18K</option><option value="14">14K</option></select>
+        <label>Making Charge (%):</label><input type="number" id="gMaking" value="0">
+        <label>GST (3%):</label><select id="gGst"><option value="yes">Haan (Yes)</option><option value="no">Nahi (No)</option></select>
+        <label>Aapke Paas Kya Hai?</label>
+        <select id="gMode"><option value="rupee">Rupees (₹)</option><option value="gram">Grams (g)</option></select>
+        <input type="number" id="gInput" placeholder="Enter Value">
+        <button class="calc-btn" style="background:#d4af37" onclick="calcGold()">Check Gold</button>
+        <div id="resGold" class="result" style="display:none;"></div>
     </div>
 
-    <hr>
+    <div id="bazarTab" class="tool-section">
+        <label>Bazar Rate (Per KG):</label><input type="number" id="bzRate" placeholder="220">
+        <label>Kitne Rupeye Ka Lena Hai?</label><input type="number" id="bzAmt" placeholder="100">
+        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">Hisaab Nikalein</button>
+        <div id="resBazar" class="result" style="display:none;"></div>
+    </div>
 
-    <div class="box">
-        <span class="badge" id="opt2">विकल्प 2</span>
-        <label id="lblBuyRupee">कितने रुपये का खरीदना है? (Cash):</label>
-        <input type="number" id="inputRupee" placeholder="5000" oninput="calcByRupee()">
-        <div class="result">
-            <span id="labelB">आपको सोना मिलेगा:</span>
-            <span class="price-text" id="resWeight">0.000 g</span>
-            <span class="small-info" id="infoB"></span>
+    <div id="weightTab" class="tool-section">
+        <label>Chiz Chuniye:</label>
+        <select id="objType" onchange="toggleWeight()">
+            <option value="steel">Loha Plate/Angle</option>
+            <option value="tank">Choukor Tanki (Pani)</option>
+            <option value="glass">Glass / Balti (Cylinder)</option>
+            <option value="bowl">Katora / Bowl (Half Sphere)</option>
+            <option value="ball">Gola (Full Sphere)</option>
+        </select>
+
+        <div id="commonInputs">
+            <label id="unitLbl">Measurement Unit:</label>
+            <select id="wUnit"><option value="in">Inch</option><option value="cm">CM</option></select>
+            
+            <div id="linearInputs">
+                <label>Lambai (Avg):</label><div class="row"><input type="number" id="wl1" placeholder="Side 1"><input type="number" id="wl2" placeholder="Side 2"></div>
+                <label>Choudai (Avg):</label><div class="row"><input type="number" id="ww1" placeholder="Side 1"><input type="number" id="ww2" placeholder="Side 2"></div>
+            </div>
+
+            <div id="diaInputs" style="display:none;">
+                <label id="d1Lbl">Upar Ka Diameter:</label><input type="number" id="wD1">
+                <label id="d2Lbl" style="display:none;">Niche Ka Diameter:</label><input type="number" id="wD2">
+            </div>
+
+            <label id="hLbl">Gehrayi / Height:</label><input type="number" id="wH">
+            <label id="tLbl">Motayi (Thickness MM):</label><input type="number" id="wT" value="0">
         </div>
+
+        <button class="calc-btn" style="background:#6c757d" onclick="calcWeight()">Calculate Now</button>
+        <div id="resWeight" class="result" style="display:none;"></div>
     </div>
 </div>
 
 <script>
-let currentLang = 'hi';
+function showTool(id, btn) {
+    document.querySelectorAll('.tool-section').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).style.display = 'block';
+    btn.classList.add('active');
+}
 
-function toggleLang() {
-    if(currentLang === 'hi') {
-        currentLang = 'en';
-        document.getElementById('langBtn').innerText = "Hindi";
-        document.getElementById('title').innerText = "Gold Calculator";
-        document.getElementById('lblRate').innerText = "Today's 24K Rate (per 10g):";
-        document.getElementById('lblPurity').innerText = "Purity (Carat):";
-        document.getElementById('lblMaking').innerText = "Making Charge:";
-        document.getElementById('opt1').innerText = "Option 1";
-        document.getElementById('lblBuyGram').innerText = "How many Grams to buy?";
-        document.getElementById('labelA').innerText = "Total Price (inc. 3% GST):";
-        document.getElementById('opt2').innerText = "Option 2";
-        document.getElementById('lblBuyRupee').innerText = "Buy for how many Rupees?";
-        document.getElementById('labelB').innerText = "Weight You Will Get:";
+function calcLand() {
+    let dArea = parseFloat(document.getElementById('directArea').value);
+    let dUnit = document.getElementById('directUnit').value;
+    let sqft = 0;
+
+    if (dArea) {
+        sqft = (dUnit === 'sqmt') ? dArea * 10.7639 : dArea;
     } else {
-        currentLang = 'hi';
-        document.getElementById('langBtn').innerText = "English";
-        document.getElementById('title').innerText = "सोना कैलकुलेटर";
-        document.getElementById('lblRate').innerText = "आज का 24K भाव (प्रति 10 ग्राम):";
-        document.getElementById('lblPurity').innerText = "शुद्धता (Carat):";
-        document.getElementById('lblMaking').innerText = "मेकिंग चार्ज (Making Charge):";
-        document.getElementById('opt1').innerText = "विकल्प 1";
-        document.getElementById('lblBuyGram').innerText = "कितने ग्राम खरीदना है?";
-        document.getElementById('labelA').innerText = "कुल कीमत (3% GST सहित):";
-        document.getElementById('opt2').innerText = "विकल्प 2";
-        document.getElementById('lblBuyRupee').innerText = "कितने रुपये का खरीदना है?";
-        document.getElementById('labelB').innerText = "आपको सोना मिलेगा:";
+        let unit = document.getElementById('landUnit').value;
+        let l = (parseFloat(document.getElementById('l1').value || 0) + parseFloat(document.getElementById('l2').value || 0)) / 2;
+        let w = (parseFloat(document.getElementById('w1').value || 0) + parseFloat(document.getElementById('w2').value || 0)) / 2;
+        let area = l * w;
+        sqft = (unit === 'mt') ? area * 10.7639 : area;
     }
-    calculateAll();
+
+    let acre = Math.floor(sqft / 43560);
+    let rem = sqft % 43560;
+    let bigha = Math.floor(rem / 6806.25); rem %= 6806.25;
+    let visa = Math.floor(rem / 340.31); 
+    let viswansi = (rem % 340.31 / 17.01).toFixed(2);
+
+    let res = document.getElementById('resLand');
+    res.style.display = 'block';
+    res.innerHTML = `<b>Area:</b> ${sqft.toFixed(2)} SqFt<br><b>Hisaab:</b> ${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi} Viswansi`;
 }
 
-function calculateAll() {
-    calcByGram();
-    calcByRupee();
-}
+function calcGold() {
+    let r10 = document.getElementById('gRate').value;
+    let c = document.getElementById('gCarat').value;
+    let m = document.getElementById('gMaking').value;
+    let gst = document.getElementById('gGst').value;
+    let val = document.getElementById('gInput').value;
+    let mode = document.getElementById('gMode').value;
 
-function getBaseRatePerGram() {
-    let rate10g = parseFloat(document.getElementById('goldRate').value) || 0;
-    let carat = parseInt(document.getElementById('carat').value);
-    return (rate10g / 10 / 24) * carat;
-}
+    let r1g = (r10/10/24)*c;
+    let rM = r1g + (r1g * m/100);
+    let rF = (gst==='yes') ? rM * 1.03 : rM;
 
-function getMakingPerGram(baseRate) {
-    let val = parseFloat(document.getElementById('makingVal').value) || 0;
-    let type = document.getElementById('makingType').value;
-    return (type === 'percent') ? (baseRate * val / 100) : val;
-}
-
-function calcByGram() {
-    let base = getBaseRatePerGram();
-    let making = getMakingPerGram(base);
-    let grams = parseFloat(document.getElementById('inputGram').value) || 0;
-    
-    if (base > 0 && grams > 0) {
-        let total = (base + making) * grams * 1.03;
-        let noMaking = base * grams * 1.03;
-        document.getElementById('resPrice').innerText = "₹" + total.toLocaleString('en-IN', {minimumFractionDigits: 2});
-        
-        let msg = (currentLang === 'hi') ? "बिना मेकिंग चार्ज के: ₹" : "Without Making Charge: ₹";
-        document.getElementById('infoA').innerText = (making > 0) ? msg + noMaking.toLocaleString('en-IN', {minimumFractionDigits: 2}) : "";
+    let res = document.getElementById('resGold');
+    res.style.display = 'block';
+    if(mode === 'rupee') {
+        let g = val / rF;
+        res.innerHTML = `₹${val} mein: <b>${g.toFixed(3)}g</b> (${(g*1000).toFixed(0)} mg)`;
     } else {
-        document.getElementById('resPrice').innerText = "₹0.00";
-        document.getElementById('infoA').innerText = "";
+        res.innerHTML = `${val}g ki kimat: <b>₹${(val * rF).toFixed(2)}</b>`;
     }
 }
 
-function calcByRupee() {
-    let base = getBaseRatePerGram();
-    let making = getMakingPerGram(base);
-    let budget = parseFloat(document.getElementById('inputRupee').value) || 0;
+function toggleWeight() {
+    let t = document.getElementById('objType').value;
+    document.getElementById('linearInputs').style.display = (t==='steel' || t==='tank') ? 'block' : 'none';
+    document.getElementById('diaInputs').style.display = (t==='glass' || t==='bowl' || t==='ball') ? 'block' : 'none';
+    document.getElementById('d2Lbl').style.display = (t==='glass') ? 'block' : 'none';
+    document.getElementById('hLbl').style.display = (t==='bowl' || t==='ball') ? 'none' : 'block';
+    document.getElementById('wH').style.display = (t==='bowl' || t==='ball') ? 'none' : 'block';
+    document.getElementById('tLbl').style.display = (t==='steel') ? 'block' : 'none';
+    document.getElementById('wT').style.display = (t==='steel') ? 'block' : 'none';
+}
 
-    if (base > 0 && budget > 0) {
-        let weightWithMaking = budget / ((base + making) * 1.03);
-        let weightNoMaking = budget / (base * 1.03);
-        document.getElementById('resWeight').innerText = weightWithMaking.toFixed(3) + " g";
-        
-        let msg = (currentLang === 'hi') ? "बिना मेकिंग के: " : "Without Making: ";
-        document.getElementById('infoB').innerText = (making > 0) ? msg + weightNoMaking.toFixed(3) + " g" : "";
-    } else {
-        document.getElementById('resWeight').innerText = "0.000 g";
-        document.getElementById('infoB').innerText = "";
+function calcWeight() {
+    let type = document.getElementById('objType').value;
+    let unit = document.getElementById('wUnit').value;
+    let vol = 0; // cm3
+    const toCm = (v) => (unit==='in' ? v*2.54 : parseFloat(v));
+
+    if(type==='steel' || type==='tank') {
+        let l = (toCm(document.getElementById('wl1').value||0) + toCm(document.getElementById('wl2').value||0))/2;
+        let w = (toCm(document.getElementById('ww1').value||0) + toCm(document.getElementById('ww2').value||0))/2;
+        let h = (type==='steel') ? (parseFloat(document.getElementById('wT').value||0)/10) : toCm(document.getElementById('wH').value||0);
+        vol = l * w * h;
+    } else if(type==='glass') {
+        let r1 = toCm(document.getElementById('wD1').value||0)/2;
+        let r2 = toCm(document.getElementById('wD2').value||0)/2;
+        let h = toCm(document.getElementById('wH').value||0);
+        vol = (Math.PI * h / 3) * (r1*r1 + r2*r2 + r1*r2);
+    } else if(type==='bowl') {
+        let r = toCm(document.getElementById('wD1').value||0)/2;
+        vol = (2/3) * Math.PI * Math.pow(r, 3);
+    } else if(type==='ball') {
+        let r = toCm(document.getElementById('wD1').value||0)/2;
+        vol = (4/3) * Math.PI * Math.pow(r, 3);
     }
+
+    let res = document.getElementById('resWeight');
+    res.style.display = 'block';
+    if(type==='steel') res.innerHTML = `Weight: <b>${(vol * 7.85 / 1000).toFixed(2)} KG</b>`;
+    else res.innerHTML = `Capacity: <b>${(vol / 1000).toFixed(3)} Liters</b>`;
+}
+
+function calcBazar() {
+    let r = document.getElementById('bzRate').value;
+    let a = document.getElementById('bzAmt').value;
+    let g = (a/r)*1000;
+    document.getElementById('resBazar').style.display='block';
+    document.getElementById('resBazar').innerHTML = `₹${a} mein: <b>${g.toFixed(2)}g</b> (${(g/1000).toFixed(3)} KG)`;
 }
 </script>
-
 </body>
-</html>
-    
-  </body>
-  
 </html>
