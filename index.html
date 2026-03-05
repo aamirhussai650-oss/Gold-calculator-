@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 <head>
     <meta charset="UTF-8">
@@ -16,7 +16,8 @@
         input, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; }
         .calc-btn { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         .result { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 8px; border: 1px dashed #333; line-height: 1.6; }
-        .or-divider { text-align: center; font-weight: bold; color: #888; margin: 10px 0; }
+        .or-divider { text-align: center; font-weight: bold; color: #888; margin: 15px 0; border-bottom: 1px solid #ddd; line-height: 0.1em; }
+        .or-divider span { background:#fff; padding:0 10px; }
     </style>
 </head>
 <body>
@@ -36,7 +37,7 @@
         <select id="landUnit"><option value="ft">Feet</option><option value="mt">Meter</option></select>
         <div class="row"><input type="number" id="l1" placeholder="Side A"> <input type="number" id="l2" placeholder="Side B"></div>
         <div class="row"><input type="number" id="w1" placeholder="Side C"> <input type="number" id="w2" placeholder="Side D"></div>
-        <div class="or-divider">--- YA (DIRECT) ---</div>
+        <div class="or-divider"><span>YA (DIRECT)</span></div>
         <input type="number" id="directArea" placeholder="Total Area Value">
         <select id="directUnit"><option value="sqft">Sq. Ft</option><option value="sqmt">Sq. Mt</option></select>
         <button class="calc-btn" onclick="calcLand()">Jameen Ka Hisaab</button>
@@ -56,9 +57,18 @@
     </div>
 
     <div id="bazarTab" class="tool-section">
-        <label>Rate (Per KG):</label><input type="number" id="bzRate" placeholder="220">
-        <label>Budget (₹):</label><input type="number" id="bzAmt" placeholder="100">
-        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">Check</button>
+        <h4 style="margin:0; color:#007bff;">1. Kitna Milega? (Rupees se Gram)</h4>
+        <label>Rate (Per KG):</label><input type="number" id="bzRate" placeholder="Ex: 220">
+        <label>Budget (₹):</label><input type="number" id="bzAmt" placeholder="Ex: 100">
+        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">Pata Karein (Gram)</button>
+        
+        <div class="or-divider"><span>YA PHIR</span></div>
+        
+        <h4 style="margin:0; color:#e67e22;">2. Rate Kya Pada? (Rate Nikalein)</h4>
+        <label>Kitne Rupeye Diye? (₹):</label><input type="number" id="revAmt" placeholder="Ex: 120">
+        <label>Kitna Wazan Mila? (Gram):</label><input type="number" id="revQty" placeholder="Ex: 700">
+        <button class="calc-btn" style="background:#e67e22" onclick="calcReverseBazar()">Rate Nikalein (Per KG)</button>
+        
         <div id="resBazar" class="result" style="display:none;"></div>
     </div>
 
@@ -67,26 +77,22 @@
         <select id="objType" onchange="toggleWeight()">
             <option value="steel">Loha Plate/Angle</option>
             <option value="tank">Choukor Tanki (Pani)</option>
+            <option value="golTanki">Gol Tanki (Pani)</option>
             <option value="glass">Glass / Balti</option>
             <option value="bowl">Katora / Bowl</option>
         </select>
-
         <label>Measurement Unit:</label>
         <select id="wUnit"><option value="in">Inch</option><option value="cm">CM</option></select>
-        
         <div id="linearInputs">
             <label>Lambai (Length):</label><input type="number" id="wl1" placeholder="Enter Length">
             <label>Choudai (Width):</label><input type="number" id="ww1" placeholder="Enter Width">
         </div>
-
         <div id="diaInputs" style="display:none;">
-            <label>Diameter:</label><input type="number" id="wD1" placeholder="Top Dia">
+            <label id="mainDiaLbl">Diameter:</label><input type="number" id="wD1" placeholder="Enter Diameter">
             <label id="d2Lbl" style="display:none;">Niche Ka Diameter:</label><input type="number" id="wD2" placeholder="Bottom Dia">
         </div>
-
         <label id="hLbl">Gehrayi / Height:</label><input type="number" id="wH" placeholder="Enter Height">
         <label id="tLbl">Motayi (Thickness MM):</label><input type="number" id="wT" value="0">
-
         <button class="calc-btn" style="background:#6c757d" onclick="calcWeight()">Calculate Now</button>
         <div id="resWeight" class="result" style="display:none;"></div>
     </div>
@@ -137,10 +143,30 @@ function calcGold() {
     }
 }
 
+function calcBazar() {
+    let r = parseFloat(document.getElementById('bzRate').value)||0;
+    let a = parseFloat(document.getElementById('bzAmt').value)||0;
+    if(!r || !a) return;
+    let g = (a/r)*1000;
+    let res = document.getElementById('resBazar');
+    res.style.display='block';
+    res.innerHTML = `Hisaab: ₹${a} mein <b>${g.toFixed(2)} Gram</b> milega.<br>(KG: ${(g/1000).toFixed(3)})`;
+}
+
+function calcReverseBazar() {
+    let a = parseFloat(document.getElementById('revAmt').value)||0;
+    let q = parseFloat(document.getElementById('revQty').value)||0;
+    if(!a || !q) return;
+    let ratePerKg = (a / q) * 1000;
+    let res = document.getElementById('resBazar');
+    res.style.display='block';
+    res.innerHTML = `Rate Nikla: <b>₹${ratePerKg.toFixed(2)} Per KG</b><br>(Dukaandaar ne ₹${a} mein ${q}g diya hai)`;
+}
+
 function toggleWeight() {
     let t = document.getElementById('objType').value;
     document.getElementById('linearInputs').style.display = (t==='steel' || t==='tank') ? 'block' : 'none';
-    document.getElementById('diaInputs').style.display = (t==='glass' || t==='bowl') ? 'block' : 'none';
+    document.getElementById('diaInputs').style.display = (t==='glass' || t==='bowl' || t==='golTanki') ? 'block' : 'none';
     document.getElementById('d2Lbl').style.display = (t==='glass') ? 'block' : 'none';
     document.getElementById('hLbl').style.display = (t==='bowl') ? 'none' : 'block';
     document.getElementById('wH').style.display = (t==='bowl') ? 'none' : 'block';
@@ -153,12 +179,15 @@ function calcWeight() {
     let unit = document.getElementById('wUnit').value;
     let vol = 0; 
     const toCm = (v) => (unit==='in' ? parseFloat(v || 0)*2.54 : parseFloat(v || 0));
-
     if(type==='steel' || type==='tank') {
         let l = toCm(document.getElementById('wl1').value);
         let w = toCm(document.getElementById('ww1').value);
         let h = (type==='steel') ? (parseFloat(document.getElementById('wT').value || 0)/10) : toCm(document.getElementById('wH').value);
         vol = l * w * h;
+    } else if(type==='golTanki') {
+        let r = toCm(document.getElementById('wD1').value)/2;
+        let h = toCm(document.getElementById('wH').value);
+        vol = Math.PI * r * r * h;
     } else if(type==='glass') {
         let r1 = toCm(document.getElementById('wD1').value)/2;
         let r2 = toCm(document.getElementById('wD2').value)/2;
@@ -173,15 +202,6 @@ function calcWeight() {
     if(type==='steel') res.innerHTML = `Wazan: <b>${(vol * 7.85 / 1000).toFixed(2)} KG</b>`;
     else res.innerHTML = `Capacity: <b>${(vol / 1000).toFixed(3)} Liters</b>`;
 }
-
-function calcBazar() {
-    let r = parseFloat(document.getElementById('bzRate').value)||0;
-    let a = parseFloat(document.getElementById('bzAmt').value)||0;
-    let g = (a/r)*1000;
-    document.getElementById('resBazar').style.display='block';
-    document.getElementById('resBazar').innerHTML = `₹${a} mein: <b>${g.toFixed(2)}g</b> (${(g/1000).toFixed(3)} KG)`;
-}
 </script>
 </body>
 </html>
- 
