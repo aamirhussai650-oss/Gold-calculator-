@@ -7,6 +7,8 @@
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
         .container { max-width: 550px; margin: auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-top: 5px solid #d4af37; }
+        .logo-container { text-align: center; margin-bottom: 10px; }
+        .logo-img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #eee; border: 2px solid #d4af37; }
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
         .menu-btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #eee; font-size: 13px; }
         .menu-btn.active { background: #d4af37; color: white; }
@@ -23,7 +25,10 @@
 <body>
 
 <div class="container">
-    <h3 style="text-align:center;">All-In-One Digital Diary 🛠️</h3>
+    <div class="logo-container">
+        <img src="logo.png" alt="App Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3067/3067451.png'">
+        <h3 style="margin: 5px 0;">All-In-One Digital Diary 🛠️</h3>
+    </div>
     
     <div class="grid-menu">
         <button class="menu-btn active" onclick="showTool('landTab', this)">Jameen (Land)</button>
@@ -57,18 +62,15 @@
     </div>
 
     <div id="bazarTab" class="tool-section">
-        <h4 style="margin:0; color:#007bff;">1. Kitna Milega? (Rupees se Gram)</h4>
+        <h4 style="margin:0; color:#007bff;">1. Kitna Milega?</h4>
         <label>Rate (Per KG):</label><input type="number" id="bzRate" placeholder="Ex: 220">
         <label>Budget (₹):</label><input type="number" id="bzAmt" placeholder="Ex: 100">
-        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">Pata Karein (Gram)</button>
-        
+        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">Gram Nikalein</button>
         <div class="or-divider"><span>YA PHIR</span></div>
-        
-        <h4 style="margin:0; color:#e67e22;">2. Rate Kya Pada? (Rate Nikalein)</h4>
+        <h4 style="margin:0; color:#e67e22;">2. Rate Kya Pada?</h4>
         <label>Kitne Rupeye Diye? (₹):</label><input type="number" id="revAmt" placeholder="Ex: 120">
         <label>Kitna Wazan Mila? (Gram):</label><input type="number" id="revQty" placeholder="Ex: 700">
-        <button class="calc-btn" style="background:#e67e22" onclick="calcReverseBazar()">Rate Nikalein (Per KG)</button>
-        
+        <button class="calc-btn" style="background:#e67e22" onclick="calcReverseBazar()">Rate Nikalein</button>
         <div id="resBazar" class="result" style="display:none;"></div>
     </div>
 
@@ -88,7 +90,7 @@
             <label>Choudai (Width):</label><input type="number" id="ww1" placeholder="Enter Width">
         </div>
         <div id="diaInputs" style="display:none;">
-            <label id="mainDiaLbl">Diameter:</label><input type="number" id="wD1" placeholder="Enter Diameter">
+            <label>Diameter:</label><input type="number" id="wD1" placeholder="Enter Diameter">
             <label id="d2Lbl" style="display:none;">Niche Ka Diameter:</label><input type="number" id="wD2" placeholder="Bottom Dia">
         </div>
         <label id="hLbl">Gehrayi / Height:</label><input type="number" id="wH" placeholder="Enter Height">
@@ -118,13 +120,22 @@ function calcLand() {
         let w = ( (parseFloat(document.getElementById('w1').value)||0) + (parseFloat(document.getElementById('w2').value)||0) ) / 2;
         sqft = (unit === 'mt') ? (l * w * 10.7639) : (l * w);
     }
+
+    // Calculations
+    let totalBigha = sqft / 6806.25; // 1 Bigha = 6806.25 SqFt
     let acre = Math.floor(sqft / 43560);
     let rem = sqft % 43560;
     let bigha = Math.floor(rem / 6806.25); rem %= 6806.25;
     let visa = Math.floor(rem / 340.31); 
     let viswansi = (rem % 340.31 / 17.01).toFixed(2);
-    document.getElementById('resLand').style.display = 'block';
-    document.getElementById('resLand').innerHTML = `<b>Area:</b> ${sqft.toFixed(2)} SqFt<br><b>Hisaab:</b> ${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi} Viswansi`;
+
+    let res = document.getElementById('resLand');
+    res.style.display = 'block';
+    res.innerHTML = `<b>Total Area:</b> ${sqft.toFixed(2)} SqFt<br>
+                     <hr>
+                     <b>Batwara:</b> ${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi} Viswansi<br>
+                     <hr>
+                     <span style="color:red; font-weight:bold;">Sirf Bigha Mein: ${totalBigha.toFixed(3)} Bigha</span>`;
 }
 
 function calcGold() {
@@ -150,7 +161,7 @@ function calcBazar() {
     let g = (a/r)*1000;
     let res = document.getElementById('resBazar');
     res.style.display='block';
-    res.innerHTML = `Hisaab: ₹${a} mein <b>${g.toFixed(2)} Gram</b> milega.<br>(KG: ${(g/1000).toFixed(3)})`;
+    res.innerHTML = `₹${a} mein <b>${g.toFixed(2)}g</b> milega.`;
 }
 
 function calcReverseBazar() {
@@ -160,7 +171,7 @@ function calcReverseBazar() {
     let ratePerKg = (a / q) * 1000;
     let res = document.getElementById('resBazar');
     res.style.display='block';
-    res.innerHTML = `Rate Nikla: <b>₹${ratePerKg.toFixed(2)} Per KG</b><br>(Dukaandaar ne ₹${a} mein ${q}g diya hai)`;
+    res.innerHTML = `Rate pada: <b>₹${ratePerKg.toFixed(2)} Per KG</b>`;
 }
 
 function toggleWeight() {
@@ -168,8 +179,8 @@ function toggleWeight() {
     document.getElementById('linearInputs').style.display = (t==='steel' || t==='tank') ? 'block' : 'none';
     document.getElementById('diaInputs').style.display = (t==='glass' || t==='bowl' || t==='golTanki') ? 'block' : 'none';
     document.getElementById('d2Lbl').style.display = (t==='glass') ? 'block' : 'none';
-    document.getElementById('hLbl').style.display = (t==='bowl') ? 'none' : 'block';
-    document.getElementById('wH').style.display = (t==='bowl') ? 'none' : 'block';
+    document.getElementById('hLbl').style.display = (t==='bowl' || t==='ball') ? 'none' : 'block';
+    document.getElementById('wH').style.display = (t==='bowl' || t==='ball') ? 'none' : 'block';
     document.getElementById('tLbl').style.display = (t==='steel') ? 'block' : 'none';
     document.getElementById('wT').style.display = (t==='steel') ? 'block' : 'none';
 }
