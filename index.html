@@ -3,215 +3,262 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All-In-One Digital Diary</title>
+    <title>Shifaan Digital Diary</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
-        .container { max-width: 550px; margin: auto; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); border-top: 5px solid #d4af37; }
-        .logo-container { text-align: center; margin-bottom: 10px; }
-        .logo-img { width: 70px; height: 70px; border-radius: 12px; object-fit: cover; background: #eee; border: 2px solid #d4af37; }
-        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 15px; }
-        .menu-btn { padding: 12px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; background: #eee; font-size: 13px; }
-        .menu-btn.active { background: #d4af37; color: white; }
-        .tool-section { display: none; text-align: left; }
+        :root { --gold: #d4af37; --dark: #1c1c1c; --green: #28a745; }
+        body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 10px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 6px solid var(--gold); }
+        .header { text-align: center; margin-bottom: 15px; position: relative; }
+        .logo-img { width: 70px; height: 70px; border-radius: 15px; border: 2px solid var(--gold); object-fit: cover; }
+        .lang-btn { position: absolute; right: 0; top: 0; padding: 5px 10px; background: var(--dark); color: white; border-radius: 5px; cursor: pointer; font-size: 12px; }
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+        .menu-btn { padding: 12px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: #eee; font-size: 14px; }
+        .menu-btn.active { background: var(--gold); color: white; }
+        .tab-content { display: none; }
         label { font-weight: bold; display: block; margin-top: 10px; font-size: 14px; }
-        .row { display: flex; gap: 5px; align-items: center; }
-        input, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 5px; font-size: 15px; }
-        .calc-btn { width: 100%; padding: 15px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; margin-top: 10px; font-weight: bold; }
-        .result { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 8px; border: 1px dashed #333; line-height: 1.6; }
-        .or-divider { text-align: center; font-weight: bold; color: #888; margin: 15px 0; border-bottom: 1px solid #ddd; line-height: 0.1em; }
-        .or-divider span { background:#fff; padding:0 10px; }
+        input, select { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ccc; border-radius: 8px; font-size: 16px; box-sizing: border-box; }
+        .row { display: flex; gap: 5px; }
+        .calc-btn { width: 100%; padding: 15px; background: var(--green); color: white; border: none; border-radius: 10px; font-size: 17px; cursor: pointer; margin-top: 10px; font-weight: bold; }
+        .result { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 10px; border: 1px dashed #333; line-height: 1.8; }
+        .calc-body { background: #000; padding: 15px; border-radius: 20px; }
+        .calc-screen { width: 100%; height: 50px; background: #000; color: white; text-align: right; font-size: 30px; border: none; margin-bottom: 10px; padding: 10px; box-sizing: border-box; }
+        .calc-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .k { height: 55px; border-radius: 50%; border: none; font-size: 20px; cursor: pointer; font-weight: bold; }
+        .k-num { background: #333; color: white; }
+        .k-op { background: #ff9f0a; color: white; }
+        .k-sp { background: #a5a5a5; color: black; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="logo-container">
-        <img src="logo.png" alt="App Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3067/3067451.png'">
-        <h3 style="margin: 5px 0;">All-In-One Digital Diary 🛠️</h3>
-    </div>
-    
-    <div class="grid-menu">
-        <button class="menu-btn active" onclick="showTool('landTab', this)">Jameen (Land)</button>
-        <button class="menu-btn" onclick="showTool('goldTab', this)">Gold (Sona)</button>
-        <button class="menu-btn" onclick="showTool('bazarTab', this)">Bazar (Mandi)</button>
-        <button class="menu-btn" onclick="showTool('weightTab', this)">Loha & Pani</button>
+    <div class="header">
+        <div class="lang-btn" onclick="toggleLang()" id="langSwitcher">English</div>
+        <img src="logo.png" alt="Logo" class="logo-img" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3067/3067451.png'">
+        <h3 id="appTitle">डिजिटल डायरी</h3>
     </div>
 
-    <div id="landTab" class="tool-section" style="display:block;">
-        <label>Unit Chuniye:</label>
-        <select id="landUnit"><option value="ft">Feet</option><option value="mt">Meter</option></select>
-        <div class="row"><input type="number" id="l1" placeholder="Side A"> <input type="number" id="l2" placeholder="Side B"></div>
-        <div class="row"><input type="number" id="w1" placeholder="Side C"> <input type="number" id="w2" placeholder="Side D"></div>
-        <div class="or-divider"><span>YA (DIRECT)</span></div>
-        <input type="number" id="directArea" placeholder="Total Area Value">
-        <select id="directUnit"><option value="sqft">Sq. Ft</option><option value="sqmt">Sq. Mt</option></select>
-        <button class="calc-btn" onclick="calcLand()">Jameen Ka Hisaab</button>
+    <div class="menu-grid">
+        <button class="menu-btn active" onclick="openTab('land', this)" id="m1">जमीन (Land)</button>
+        <button class="menu-btn" onclick="openTab('bazar', this)" id="m2">बाजार (Mandi)</button>
+        <button class="menu-btn" onclick="openTab('gold', this)" id="m3">सोना (Gold)</button>
+        <button class="menu-btn" onclick="openTab('weight', this)" id="m4">लोहा-पानी</button>
+        <button class="menu-btn" style="grid-column: span 2; background:#34495e; color:white;" onclick="openTab('calc', this)" id="m5">कैलकुलेटर 🔢</button>
+    </div>
+
+    <div id="land" class="tab-content" style="display:block;">
+        <label id="l1">यूनिट चुनें:</label>
+        <select id="lUnit"><option value="ft">Feet (फीट)</option><option value="mt">Meter (मीटर)</option></select>
+        <div class="row"><input type="number" id="s1" placeholder="Side A"> <input type="number" id="s2" placeholder="Side B"></div>
+        <div class="row"><input type="number" id="s3" placeholder="Side C"> <input type="number" id="s4" placeholder="Side D"></div>
+        <p style="text-align:center; margin:5px;" id="l2">या सीधा एरिया डालें:</p>
+        <input type="number" id="dArea" placeholder="Area Value">
+        <select id="dUnit"><option value="sqft">Sq. Ft</option><option value="sqmt">Sq. Mt</option></select>
+        <button class="calc-btn" onclick="calcLand()" id="b1">हिसाब निकालें</button>
         <div id="resLand" class="result" style="display:none;"></div>
     </div>
 
-    <div id="goldTab" class="tool-section">
-        <label>24K Rate (10g):</label><input type="number" id="gRate" placeholder="75000">
-        <label>Caret:</label>
-        <select id="gCarat"><option value="24">24K</option><option value="22">22K</option><option value="20">20K</option><option value="18">18K</option><option value="14">14K</option></select>
-        <label>Making (%):</label><input type="number" id="gMaking" value="0">
-        <label>GST (3%):</label><select id="gGst"><option value="yes">Yes</option><option value="no">No</option></select>
-        <select id="gMode"><option value="rupee">Rupees (₹)</option><option value="gram">Grams (g)</option></select>
-        <input type="number" id="gInput" placeholder="Enter Value">
-        <button class="calc-btn" style="background:#d4af37" onclick="calcGold()">Check Gold</button>
-        <div id="resGold" class="result" style="display:none;"></div>
-    </div>
-
-    <div id="bazarTab" class="tool-section">
-        <h4 style="margin:0; color:#007bff;">1. Kitna Milega?</h4>
-        <label>Rate (Per KG):</label><input type="number" id="bzRate" placeholder="Ex: 220">
-        <label>Budget (₹):</label><input type="number" id="bzAmt" placeholder="Ex: 100">
-        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">Gram Nikalein</button>
-        <div class="or-divider"><span>YA PHIR</span></div>
-        <h4 style="margin:0; color:#e67e22;">2. Rate Kya Pada?</h4>
-        <label>Kitne Rupeye Diye? (₹):</label><input type="number" id="revAmt" placeholder="Ex: 120">
-        <label>Kitna Wazan Mila? (Gram):</label><input type="number" id="revQty" placeholder="Ex: 700">
-        <button class="calc-btn" style="background:#e67e22" onclick="calcReverseBazar()">Rate Nikalein</button>
+    <div id="bazar" class="tab-content">
+        <label id="bz1">रेट (प्रति किलो):</label><input type="number" id="bzR" placeholder="Price/KG">
+        <label id="bz2">कुल रुपये:</label><input type="number" id="bzA" placeholder="Amount">
+        <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">वजन चेक करें</button>
+        <hr style="margin:20px 0;">
+        <label id="bz3">कितने रुपये दिए?:</label><input type="number" id="rvA" placeholder="Paid">
+        <label id="bz4">कितना ग्राम मिला?:</label><input type="number" id="rvG" placeholder="Gram">
+        <button class="calc-btn" style="background:#e67e22" onclick="calcRevBazar()">रेट चेक करें</button>
         <div id="resBazar" class="result" style="display:none;"></div>
     </div>
 
-    <div id="weightTab" class="tool-section">
-        <label>Chiz Chuniye:</label>
-        <select id="objType" onchange="toggleWeight()">
-            <option value="steel">Loha Plate/Angle</option>
-            <option value="tank">Choukor Tanki (Pani)</option>
-            <option value="golTanki">Gol Tanki (Pani)</option>
-            <option value="glass">Glass / Balti</option>
-            <option value="bowl">Katora / Bowl</option>
+    <div id="gold" class="tab-content">
+        <label id="g1">24K रेट (10g):</label><input type="number" id="gR">
+        <label id="g2">कैरेट (Purity):</label>
+        <select id="gP">
+            <option value="1">24K (100%)</option>
+            <option value="0.916">22K (91.6)</option>
+            <option value="0.833">20K (83.3)</option>
+            <option value="0.750">18K (75.0)</option>
+            <option value="0.585">14K (58.5)</option>
         </select>
-        <label>Measurement Unit:</label>
-        <select id="wUnit"><option value="in">Inch</option><option value="cm">CM</option></select>
-        <div id="linearInputs">
-            <label>Lambai (Length):</label><input type="number" id="wl1" placeholder="Enter Length">
-            <label>Choudai (Width):</label><input type="number" id="ww1" placeholder="Enter Width">
+        <label id="g3">मेकिंग (%):</label><input type="number" id="gM" value="0">
+        <label id="g4">GST (3%):</label><select id="gG"><option value="1.03">Yes</option><option value="1">No</option></select>
+        <label id="g5">इनपुट (ग्राम/रुपये):</label>
+        <div class="row"><input type="number" id="gI"><select id="gMode"><option value="g">Gram</option><option value="r">Rupaye</option></select></div>
+        <button class="calc-btn" style="background:var(--gold)" onclick="calcGold()" id="b4">चेक गोल्ड</button>
+        <div id="resGold" class="result" style="display:none;"></div>
+    </div>
+
+    <div id="weight" class="tab-content">
+        <label id="w1">चीज़ चुनें:</label>
+        <select id="wT" onchange="toggleW()">
+            <option value="p">Loha Plate/Angle</option>
+            <option value="r">Choukor Tanki</option>
+            <option value="c">Gol Tanki</option>
+            <option value="ball">Boll (Pura)</option>
+            <option value="bowl">Katora (Aadha)</option>
+        </select>
+        <div id="pRow">
+            <label id="w2">लंबाई:</label><div class="row"><input type="number" id="wl"><select id="wul"><option value="1">Inch</option><option value="12">Feet</option><option value="0.3937">CM</option></select></div>
+            <label id="w3">चौड़ाई:</label><div class="row"><input type="number" id="ww"><select id="wuw"><option value="1">Inch</option><option value="12">Feet</option><option value="0.3937">CM</option></select></div>
         </div>
-        <div id="diaInputs" style="display:none;">
-            <label>Diameter:</label><input type="number" id="wD1" placeholder="Enter Diameter">
-            <label id="d2Lbl" style="display:none;">Niche Ka Diameter:</label><input type="number" id="wD2" placeholder="Bottom Dia">
+        <div id="dRow" style="display:none;">
+            <label id="w4">व्यास (Inches):</label><input type="number" id="wdia">
         </div>
-        <label id="hLbl">Gehrayi / Height:</label><input type="number" id="wH" placeholder="Enter Height">
-        <label id="tLbl">Motayi (Thickness MM):</label><input type="number" id="wT" value="0">
-        <button class="calc-btn" style="background:#6c757d" onclick="calcWeight()">Calculate Now</button>
+        <label id="hl">ऊंचाई (Inches):</label><input type="number" id="wh">
+        <label id="tl">मोटाई (Thickness MM):</label><input type="number" id="wt" value="0">
+        <button class="calc-btn" style="background:#6c757d" onclick="calcWeight()">हिसाब निकालें</button>
         <div id="resWeight" class="result" style="display:none;"></div>
+    </div>
+
+    <div id="calc" class="tab-content">
+        <div class="calc-body">
+            <input type="text" id="disp" class="calc-screen" value="0" readonly>
+            <div class="calc-keys">
+                <button class="k k-sp" onclick="cClr()">AC</button>
+                <button class="k k-sp" onclick="cDel()">C</button>
+                <button class="k k-sp" onclick="cPerc()">%</button>
+                <button class="k k-op" onclick="cIn('/')">÷</button>
+                <button class="k k-num" onclick="cIn('7')">7</button>
+                <button class="k k-num" onclick="cIn('8')">8</button>
+                <button class="k k-num" onclick="cIn('9')">9</button>
+                <button class="k k-op" onclick="cIn('*')">×</button>
+                <button class="k k-num" onclick="cIn('4')">4</button>
+                <button class="k k-num" onclick="cIn('5')">5</button>
+                <button class="k k-num" onclick="cIn('6')">6</button>
+                <button class="k k-op" onclick="cIn('-')">−</button>
+                <button class="k k-num" onclick="cIn('1')">1</button>
+                <button class="k k-num" onclick="cIn('2')">2</button>
+                <button class="k k-num" onclick="cIn('3')">3</button>
+                <button class="k k-op" onclick="cIn('+')">+</button>
+                <button class="k k-num" style="grid-column: span 2; border-radius:30px;" onclick="cIn('0')">0</button>
+                <button class="k k-num" onclick="cIn('.')">.</button>
+                <button class="k k-op" onclick="cRes()">=</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-function showTool(id, btn) {
-    document.querySelectorAll('.tool-section').forEach(t => t.style.display = 'none');
-    document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(id).style.display = 'block';
-    btn.classList.add('active');
+let currentLang = 'hi';
+function toggleLang() {
+    currentLang = (currentLang === 'hi') ? 'en' : 'hi';
+    const dict = {
+        hi: {title: "डिजिटल डायरी", m1: "जमीन (Land)", m2: "बाजार (Mandi)", m3: "सोना (Gold)", m4: "लोहा-पानी", m5: "कैलकुलेटर 🔢", sw: "English"},
+        en: {title: "Digital Diary", m1: "Land", m2: "Market", m3: "Gold", m4: "Steel-Water", m5: "Calculator 🔢", sw: "Hindi"}
+    };
+    document.getElementById('appTitle').innerText = dict[currentLang].title;
+    document.getElementById('m1').innerText = dict[currentLang].m1;
+    document.getElementById('m2').innerText = dict[currentLang].m2;
+    document.getElementById('m3').innerText = dict[currentLang].m3;
+    document.getElementById('m4').innerText = dict[currentLang].m4;
+    document.getElementById('m5').innerText = dict[currentLang].m5;
+    document.getElementById('langSwitcher').innerText = dict[currentLang].sw;
 }
 
+function openTab(id, b) {
+    document.querySelectorAll('.tab-content').forEach(t=>t.style.display='none');
+    document.querySelectorAll('.menu-btn').forEach(btn=>btn.classList.remove('active'));
+    document.getElementById(id).style.display='block'; b.classList.add('active');
+}
+
+// LAND
 function calcLand() {
-    let dArea = parseFloat(document.getElementById('directArea').value);
-    let dUnit = document.getElementById('directUnit').value;
     let sqft = 0;
-    if (dArea) {
-        sqft = (dUnit === 'sqmt') ? dArea * 10.7639 : dArea;
+    let d = parseFloat(document.getElementById('dArea').value);
+    if(d) {
+        sqft = (document.getElementById('dUnit').value==='sqmt')? d*10.7639 : d;
     } else {
-        let unit = document.getElementById('landUnit').value;
-        let l = ( (parseFloat(document.getElementById('l1').value)||0) + (parseFloat(document.getElementById('l2').value)||0) ) / 2;
-        let w = ( (parseFloat(document.getElementById('w1').value)||0) + (parseFloat(document.getElementById('w2').value)||0) ) / 2;
-        sqft = (unit === 'mt') ? (l * w * 10.7639) : (l * w);
+        let u = document.getElementById('lUnit').value;
+        let l = ((parseFloat(document.getElementById('s1').value)||0)+(parseFloat(document.getElementById('s2').value)||0))/2;
+        let w = ((parseFloat(document.getElementById('s3').value)||0)+(parseFloat(document.getElementById('s4').value)||0))/2;
+        sqft = (u==='mt')? l*w*10.7639 : l*w;
     }
-
-    // Calculations
-    let totalBigha = sqft / 6806.25; // 1 Bigha = 6806.25 SqFt
+    let totalBigha = sqft / 6806.25; 
     let acre = Math.floor(sqft / 43560);
-    let rem = sqft % 43560;
-    let bigha = Math.floor(rem / 6806.25); rem %= 6806.25;
-    let visa = Math.floor(rem / 340.31); 
-    let viswansi = (rem % 340.31 / 17.01).toFixed(2);
-
-    let res = document.getElementById('resLand');
-    res.style.display = 'block';
-    res.innerHTML = `<b>Total Area:</b> ${sqft.toFixed(2)} SqFt<br>
-                     <hr>
-                     <b>Batwara:</b> ${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi} Viswansi<br>
-                     <hr>
-                     <span style="color:red; font-weight:bold;">Sirf Bigha Mein: ${totalBigha.toFixed(3)} Bigha</span>`;
+    let remSqft = sqft % 43560;
+    let bigha = Math.floor(remSqft / 6806.25);
+    let remSqft2 = remSqft % 6806.25;
+    let visa = Math.floor(remSqft2 / 340.31);
+    let viswansi = (remSqft2 % 340.31) / 17.01;
+    let res = document.getElementById('resLand'); res.style.display='block';
+    res.innerHTML = `Area: <b>${sqft.toFixed(2)} Sq.Ft</b><br>Hisaab: <b>${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi.toFixed(2)} Viswansi</b><hr><span style="color:red; font-weight:bold;">Total Bigha: ${totalBigha.toFixed(3)}</span>`;
 }
 
+// BAZAR
+function calcBazar(){
+    let r = parseFloat(document.getElementById('bzR').value)||0, a = parseFloat(document.getElementById('bzA').value)||0;
+    let res = document.getElementById('resBazar');
+    if(r > 0) { res.style.display='block'; res.innerHTML = `Mila: <b>${((a/r)*1000).toFixed(2)} Gram</b>`; }
+}
+function calcRevBazar(){
+    let a = parseFloat(document.getElementById('rvA').value)||0, g = parseFloat(document.getElementById('rvG').value)||0;
+    let res = document.getElementById('resBazar');
+    if(g > 0) { res.style.display='block'; res.innerHTML = `Rate pada: <b>₹${((a/g)*1000).toFixed(2)} /KG</b>`; }
+}
+
+// GOLD
 function calcGold() {
-    let r10 = parseFloat(document.getElementById('gRate').value)||0;
-    let r1g = (r10/10/24)*parseInt(document.getElementById('gCarat').value);
-    let rM = r1g + (r1g * (parseFloat(document.getElementById('gMaking').value)||0)/100);
-    let rF = (document.getElementById('gGst').value==='yes') ? rM * 1.03 : rM;
-    let val = parseFloat(document.getElementById('gInput').value)||0;
-    let res = document.getElementById('resGold');
-    res.style.display = 'block';
-    if(document.getElementById('gMode').value === 'rupee') {
-        let g = val / rF;
-        res.innerHTML = `₹${val} mein: <b>${g.toFixed(3)}g</b> (${(g*1000).toFixed(0)} mg)`;
-    } else {
-        res.innerHTML = `${val}g ki kimat: <b>₹${(val * rF).toFixed(2)}</b>`;
-    }
+    let baseRate = (parseFloat(document.getElementById('gR').value)||0)/10;
+    let purity = parseFloat(document.getElementById('gP').value);
+    let making = (baseRate * purity) * (parseFloat(document.getElementById('gM').value)||0)/100;
+    let final = ((baseRate * purity) + making) * parseFloat(document.getElementById('gG').value);
+    let val = parseFloat(document.getElementById('gI').value)||0;
+    let res = document.getElementById('resGold'); res.style.display='block';
+    if(document.getElementById('gMode').value==='g') res.innerHTML = `Price: <b>₹${(val*final).toFixed(2)}</b>`;
+    else res.innerHTML = `Weight: <b>${(val/final).toFixed(3)} Gram</b>`;
 }
 
-function calcBazar() {
-    let r = parseFloat(document.getElementById('bzRate').value)||0;
-    let a = parseFloat(document.getElementById('bzAmt').value)||0;
-    if(!r || !a) return;
-    let g = (a/r)*1000;
-    let res = document.getElementById('resBazar');
-    res.style.display='block';
-    res.innerHTML = `₹${a} mein <b>${g.toFixed(2)}g</b> milega.`;
+// WEIGHT/STEEL
+function toggleW() {
+    let v = document.getElementById('wT').value;
+    document.getElementById('pRow').style.display = (v==='p'||v==='r')?'block':'none';
+    document.getElementById('dRow').style.display = (v==='c'||v==='ball'||v==='bowl')?'block':'none';
 }
-
-function calcReverseBazar() {
-    let a = parseFloat(document.getElementById('revAmt').value)||0;
-    let q = parseFloat(document.getElementById('revQty').value)||0;
-    if(!a || !q) return;
-    let ratePerKg = (a / q) * 1000;
-    let res = document.getElementById('resBazar');
-    res.style.display='block';
-    res.innerHTML = `Rate pada: <b>₹${ratePerKg.toFixed(2)} Per KG</b>`;
-}
-
-function toggleWeight() {
-    let t = document.getElementById('objType').value;
-    document.getElementById('linearInputs').style.display = (t==='steel' || t==='tank') ? 'block' : 'none';
-    document.getElementById('diaInputs').style.display = (t==='glass' || t==='bowl' || t==='golTanki') ? 'block' : 'none';
-    document.getElementById('d2Lbl').style.display = (t==='glass') ? 'block' : 'none';
-    document.getElementById('hLbl').style.display = (t==='bowl' || t==='ball') ? 'none' : 'block';
-    document.getElementById('wH').style.display = (t==='bowl' || t==='ball') ? 'none' : 'block';
-    document.getElementById('tLbl').style.display = (t==='steel') ? 'block' : 'none';
-    document.getElementById('wT').style.display = (t==='steel') ? 'block' : 'none';
-}
-
 function calcWeight() {
-    let type = document.getElementById('objType').value;
-    let unit = document.getElementById('wUnit').value;
-    let vol = 0; 
-    const toCm = (v) => (unit==='in' ? parseFloat(v || 0)*2.54 : parseFloat(v || 0));
-    if(type==='steel' || type==='tank') {
-        let l = toCm(document.getElementById('wl1').value);
-        let w = toCm(document.getElementById('ww1').value);
-        let h = (type==='steel') ? (parseFloat(document.getElementById('wT').value || 0)/10) : toCm(document.getElementById('wH').value);
+    let t = document.getElementById('wT').value;
+    let vol = 0; let r = (parseFloat(document.getElementById('wdia').value)||0)/2;
+    if(t==='p'||t==='r') {
+        let l = (parseFloat(document.getElementById('wl').value)||0) * parseFloat(document.getElementById('wul').value);
+        let w = (parseFloat(document.getElementById('ww').value)||0) * parseFloat(document.getElementById('wuw').value);
+        let h = (t==='p') ? (parseFloat(document.getElementById('wt').value)||0)/25.4 : parseFloat(document.getElementById('wh').value)||0;
         vol = l * w * h;
-    } else if(type==='golTanki') {
-        let r = toCm(document.getElementById('wD1').value)/2;
-        let h = toCm(document.getElementById('wH').value);
-        vol = Math.PI * r * r * h;
-    } else if(type==='glass') {
-        let r1 = toCm(document.getElementById('wD1').value)/2;
-        let r2 = toCm(document.getElementById('wD2').value)/2;
-        let h = toCm(document.getElementById('wH').value);
-        vol = (Math.PI * h / 3) * (r1*r1 + r2*r2 + r1*r2);
-    } else if(type==='bowl') {
-        let r = toCm(document.getElementById('wD1').value)/2;
-        vol = (2/3) * Math.PI * Math.pow(r, 3);
-    }
-    let res = document.getElementById('resWeight');
-    res.style.display = 'block';
-    if(type==='steel') res.innerHTML = `Wazan: <b>${(vol * 7.85 / 1000).toFixed(2)} KG</b>`;
-    else res.innerHTML = `Capacity: <b>${(vol / 1000).toFixed(3)} Liters</b>`;
+    } else if(t==='c') { vol = Math.PI * r * r * (parseFloat(document.getElementById('wh').value)||0); }
+    else if(t==='ball') { vol = (4/3) * Math.PI * Math.pow(r, 3); }
+    else if(t==='bowl') { vol = (2/3) * Math.PI * Math.pow(r, 3); }
+    let res = document.getElementById('resWeight'); res.style.display='block';
+    if(t==='p') res.innerHTML = `Weight: <b>${(vol * 0.2836).toFixed(2)} KG</b>`;
+    else res.innerHTML = `Capacity: <b>${(vol * 0.01638).toFixed(2)} Liters</b>`;
+}
+
+// CALCULATOR PERCENTAGE LOGIC
+let d = document.getElementById('disp');
+function cIn(v){ if(d.value==='0') d.value=v; else d.value+=v; }
+function cClr(){ d.value='0'; }
+function cDel(){ d.value=d.value.slice(0,-1); if(d.value==='') d.value='0'; }
+
+function cPerc() {
+    try {
+        let val = d.value;
+        if(val.includes('+') || val.includes('-') || val.includes('*') || val.includes('/')) {
+            let parts = val.split(/([\+\-\*\/])/);
+            let lastNum = parts.pop();
+            let op = parts.pop();
+            let firstPart = eval(parts.join(''));
+            if(op === '+' || op === '-') {
+                d.value = firstPart + op + (firstPart * lastNum / 100);
+            } else {
+                d.value = firstPart + op + (lastNum / 100);
+            }
+        } else {
+            d.value = eval(val) / 100;
+        }
+    } catch { d.value = 'Error'; }
+}
+
+function cRes(){
+    try {
+        let exp = d.value.replace(/×/g, '*').replace(/÷/g, '/');
+        d.value = eval(exp);
+    } catch { d.value = 'Error'; }
 }
 </script>
 </body>
