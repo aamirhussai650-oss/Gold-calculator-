@@ -229,6 +229,28 @@ function cPerc(){
     } catch { disp.value='Error'; }
 }
 function cRes(){ try{ disp.value=eval(disp.value.replace(/×/g,'*').replace(/÷/g,'/')); } catch{ disp.value='Error'; } }
+</script><script type="module">
+  // Firebase SDK ko direct web se load karne ke liye links
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-analytics.js";
+
+  // Aapka copied configuration yahan hai
+  const firebaseConfig = {
+    apiKey: "AIzaSyAMV4kZ4WTo5papVjNb9-WTWyqFGQIL0f4",
+    authDomain: "shifan-digital-tool.firebaseapp.com",
+    projectId: "shifan-digital-tool",
+    storageBucket: "shifan-digital-tool.firebasestorage.app",
+    messagingSenderId: "866783883640",
+    appId: "1:866783883640:web:f24c21ec53087f581c988d",
+    measurementId: "G-5G5C4H7ZT2"
+  };
+
+  // Firebase ko initialize karna
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  console.log("Shifan Digital Tool: Firebase Analytics Connected Successfully!");
 </script>
+
 </body>
 </html>
