@@ -8,7 +8,7 @@
         :root { --gold: #d4af37; --dark: #1c1c1c; --green: #28a745; }
         body { font-family: 'Segoe UI', sans-serif; background: #f4f7f6; margin: 0; padding: 10px; }
         .container { max-width: 500px; margin: auto; background: white; padding: 15px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border-top: 6px solid var(--gold); }
-        .header { text-align: center; margin-bottom: 15px; position: relative; }
+        .header { text-align: center; margin-bottom: 15px; }
         .logo-container { width: 80px; height: 80px; margin: auto; border: 3px solid var(--gold); border-radius: 20px; overflow: hidden; background: #eee; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .logo-img { width: 100%; height: 100%; object-fit: cover; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; margin-top: 15px; }
@@ -20,6 +20,7 @@
         .row { display: flex; gap: 5px; }
         .calc-btn { width: 100%; padding: 15px; background: var(--green); color: white; border: none; border-radius: 10px; font-size: 17px; cursor: pointer; margin-top: 10px; font-weight: bold; }
         .result { margin-top: 15px; padding: 15px; background: #fffde7; border-radius: 10px; border: 1px dashed #333; line-height: 1.8; }
+        /* Calculator Design */
         .calc-body { background: #000; padding: 15px; border-radius: 20px; }
         .calc-screen { width: 100%; height: 50px; background: #000; color: white; text-align: right; font-size: 30px; border: none; margin-bottom: 10px; padding: 10px; box-sizing: border-box; }
         .calc-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
@@ -42,7 +43,7 @@
 
     <div class="menu-grid">
         <button class="menu-btn active" onclick="openTab('land', this)">जमीन (Land)</button>
-        <button class="menu-btn" onclick="openTab('bazar', this)">बाजार (Market)</button>
+        <button class="menu-btn" onclick="openTab('bazar', this)">बाazar (Market)</button>
         <button class="menu-btn" onclick="openTab('gold', this)">सोना (Gold)</button>
         <button class="menu-btn" onclick="openTab('weight', this)">लोहा-पानी</button>
         <button class="menu-btn" style="grid-column: span 2; background:#34495e; color:white;" onclick="openTab('calc', this)">कैलकुलेटर 🔢</button>
@@ -66,9 +67,7 @@
         <label>रेट / KG (Rate per KG):</label><input type="number" id="bzR" placeholder="₹ Rate">
         <label>कुल रुपये (Total Rupees):</label><input type="number" id="bzA" placeholder="₹ Total">
         <button class="calc-btn" style="background:#007bff" onclick="calcBazar()">वजन चेक करें (Check Weight)</button>
-        
         <hr style="margin:25px 0; border: 1px solid #ddd;">
-        
         <label>कितने रुपये दिए? (Paid Amount):</label><input type="number" id="rvA" placeholder="₹ Paid">
         <label>कितना ग्राम मिला? (Weight Received):</label><input type="number" id="rvG" placeholder="Gram">
         <button class="calc-btn" style="background:#e67e22" onclick="calcRevBazar()">रेट चेक करें (Check Rate)</button>
@@ -145,18 +144,21 @@
 </div>
 
 <script>
+// Logo load karne ke liye
 function loadLogo(event) {
     let reader = new FileReader();
     reader.onload = function(){ document.getElementById('mainLogo').src = reader.result; };
     reader.readAsDataURL(event.target.files[0]);
 }
 
+// Tabs badalne ke liye
 function openTab(id, b) {
     document.querySelectorAll('.tab-content').forEach(t=>t.style.display='none');
     document.querySelectorAll('.menu-btn').forEach(btn=>btn.classList.remove('active'));
     document.getElementById(id).style.display='block'; b.classList.add('active');
 }
 
+// --- LAND CALCULATION ---
 function calcLand() {
     let sqft = 0; let d = parseFloat(document.getElementById('dArea').value);
     if(d) sqft = (document.getElementById('dUnit').value==='sqmt')? d*10.7639 : d;
@@ -165,14 +167,20 @@ function calcLand() {
         let w = ((parseFloat(document.getElementById('s3').value)||0)+(parseFloat(document.getElementById('s4').value)||0))/2;
         sqft = (document.getElementById('lUnit').value==='mt')? l*w*10.7639 : l*w;
     }
+    let sqmt = sqft / 10.7639; // Square Meter calculation
     let acre = Math.floor(sqft / 43560), r1 = sqft % 43560;
     let bigha = Math.floor(r1 / 6806.25), r2 = r1 % 6806.25;
     let visa = Math.floor(r2 / 340.31), viswansi = (r2 % 340.31) / 17.01;
     let totalBigha = sqft / 6806.25;
+
     let res = document.getElementById('resLand'); res.style.display='block';
-    res.innerHTML = `Area: <b>${sqft.toFixed(2)} Sq.Ft</b><br>Hisaab: <b>${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi.toFixed(2)} Viswansi</b><br><hr><span style="color:red; font-weight:bold;">Total Bigha: ${totalBigha.toFixed(3)}</span>`;
+    res.innerHTML = `
+        Sq. Ft: <b>${sqft.toFixed(2)}</b> | Sq. Mt: <b>${sqmt.toFixed(2)}</b><br>
+        Hisaab: <b>${acre} Acre, ${bigha} Bigha, ${visa} Visa, ${viswansi.toFixed(2)} Viswansi</b><br>
+        <hr><span style="color:red; font-weight:bold;">Total Bigha: ${totalBigha.toFixed(3)}</span>`;
 }
 
+// --- LOHA PANI CALCULATION ---
 function toggleW() {
     let v = document.getElementById('wT').value;
     document.getElementById('pRow').style.display = (v==='p'||v==='r')?'block':'none';
@@ -209,10 +217,12 @@ function calcWeight() {
     else if(t==='bowl') { vol = (2/3) * Math.PI * Math.pow(d1/2, 3); }
 
     let res = document.getElementById('resWeight'); res.style.display='block';
-    if(t==='p') res.innerHTML = `Vazan (Weight): <b>${(vol * 0.128).toFixed(2)} KG</b>`;
-    else res.innerHTML = `Capacity (Pani): <b>${(vol * 0.01638).toFixed(2)} Liters</b>`;
+    let cubicInch = vol.toFixed(2);
+    if(t==='p') res.innerHTML = `Vazan: <b>${(vol * 0.128).toFixed(2)} KG</b><br>Volume: <b>${cubicInch} Cubic Inch</b>`;
+    else res.innerHTML = `Capacity: <b>${(vol * 0.01638).toFixed(2)} Liters</b><br>Volume: <b>${cubicInch} Cubic Inch</b>`;
 }
 
+// --- GOLD CALCULATION ---
 function calcGold() {
     let base = (parseFloat(document.getElementById('gR').value)||0)/10 * parseFloat(document.getElementById('gP').value);
     let final = (base + (base * (parseFloat(document.getElementById('gM').value)||0)/100)) * parseFloat(document.getElementById('gG').value);
@@ -222,6 +232,7 @@ function calcGold() {
     else res.innerHTML = `Weight: <b>${(val/final).toFixed(3)} Gram</b>`;
 }
 
+// --- BAZAR CALCULATION ---
 function calcBazar(){
     let r = parseFloat(document.getElementById('bzR').value)||0; 
     let a = parseFloat(document.getElementById('bzA').value)||0;
@@ -229,24 +240,20 @@ function calcBazar(){
         let grams = (a/r)*1000;
         let res = document.getElementById('resBazar');
         res.style.display='block';
-        if(grams >= 1000) {
-            res.innerHTML = `Mila (Received): <b>${(grams/1000).toFixed(3)} KG</b>`;
-        } else {
-            res.innerHTML = `Mila (Received): <b>${grams.toFixed(2)} Gram</b>`;
-        }
+        if(grams >= 1000) { res.innerHTML = `Mila: <b>${(grams/1000).toFixed(3)} KG</b>`; }
+        else { res.innerHTML = `Mila: <b>${grams.toFixed(2)} Gram</b>`; }
     }
 }
 function calcRevBazar(){
     let a = parseFloat(document.getElementById('rvA').value)||0;
     let g = parseFloat(document.getElementById('rvG').value)||0;
     if(g > 0) {
-        let rate = (a/g)*1000;
-        let res = document.getElementById('resBazar');
-        res.style.display='block';
-        res.innerHTML = `Rate: <b>₹${rate.toFixed(2)} / KG</b>`;
+        let res = document.getElementById('resBazar'); res.style.display='block';
+        res.innerHTML = `Rate: <b>₹${((a/g)*1000).toFixed(2)} / KG</b>`;
     }
 }
 
+// --- CALCULATOR ENGINE ---
 let disp = document.getElementById('disp');
 function cIn(v){ if(disp.value==='0') disp.value=v; else disp.value+=v; }
 function cClr(){ disp.value='0'; }
